@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  iban-service:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: iban-service
+    restart: always
+    environment:
+      - "ADDR=0.0.0.0:8080"
