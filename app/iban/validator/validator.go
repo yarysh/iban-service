@@ -3,6 +3,11 @@ package validator
 const MOD = 97
 
 //go:generate go run "github.com/yarysh/iban-service/app/iban" gen_validator_rules
+//Validate - check if IBAN is valid
+// Validation consists of two steps:
+//	1. checking IBAN structure, based on SWIFT rules: https://www.swift.com/standards/data-standards/iban-international-bank-account-number
+//	2. validating IBAN by converting it into an integer and performing a basic mod-97 operation
+// More information: https://en.wikipedia.org/wiki/International_Bank_Account_Number#Validating_the_IBAN
 func Validate(iban string) bool {
 	ibanLen := len(iban)
 	if ibanLen < 2 {

@@ -46,6 +46,9 @@ var Rules = map[string]Rule{
 }
 `))
 
+//getRawRulesFromFile - Parse and return raw rules from swift file
+// You can download TXT version of the swift's rules file here:
+// https://www.swift.com/standards/data-standards/iban-international-bank-account-number
 func getRawRulesFromFile(filePath string) ([]string, error) {
 	srcFile, err := os.Open(filePath)
 	if err != nil {
@@ -70,6 +73,7 @@ func getRawRulesFromFile(filePath string) ([]string, error) {
 	return nil, fmt.Errorf("IBAN rules not found")
 }
 
+//convertRawRules - Convert raw rules to regexps
 func convertRawRules(rawRules []string) (map[string]rule, error) {
 	result := map[string]rule{}
 	for _, rawRule := range rawRules {
@@ -129,6 +133,7 @@ func convertRawRules(rawRules []string) (map[string]rule, error) {
 	return result, nil
 }
 
+//genRulesCode - Generate code for rules.go
 func genRulesCode(rules map[string]rule) ([]byte, error) {
 	var tpl bytes.Buffer
 	err := rulesFileTpl.Execute(&tpl, rules)
@@ -138,6 +143,7 @@ func genRulesCode(rules map[string]rule) ([]byte, error) {
 	return format.Source(tpl.Bytes())
 }
 
+//saveCodeToFile - Save generated code to file
 func saveCodeToFile(filePath string, code []byte) error {
 	outFile, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0644)
 	if err != nil {
@@ -173,25 +179,21 @@ func (cmd GenValidatorRulesCmd) Run(params []string) error {
 		return err
 	}
 
-	// Parse raw rules from swift file
 	rawRules, err := getRawRulesFromFile(*src)
 	if err != nil {
 		return err
 	}
 
-	// Convert raw rules to regexp
 	rules, err := convertRawRules(rawRules)
 	if err != nil {
 		return err
 	}
 
-	// Generate code for rules.go
 	code, err := genRulesCode(rules)
 	if err != nil {
 		return err
 	}
 
-	// Save generated code to file
 	err = saveCodeToFile(*out, code)
 	if err != nil {
 		return err
