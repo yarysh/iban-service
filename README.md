@@ -9,7 +9,7 @@ IBAN validation consists of two steps:
 For more information: https://en.wikipedia.org/wiki/International_Bank_Account_Number#Validating_the_IBAN
 
 
-###API
+### API
 Makes a basic GET request with ```iban``` parameter
 
 ```curl http://127.0.0.1:8080/?iban=DK5000400440116243```
@@ -34,7 +34,7 @@ API returns `400 BadRequest` if no `iban` parameter provided:
 ```
 
 
-###Makefile
+### Makefile
 #### ```make build```
 Build service binary
 
